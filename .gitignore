@@ -6,3 +6,6 @@ bin
 
 # golang vendor (dependencies) directory
 vendor
+
+env.yml
+node_modules
