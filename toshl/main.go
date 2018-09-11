@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 
@@ -28,12 +27,14 @@ func Handler(ctx context.Context, snsEvent events.SNSEvent) {
 	for _, record := range snsEvent.Records {
 		snsRecord := record.SNS
 
-		fmt.Printf("[%s %s] Message = %s \n", record.EventSource, snsRecord.Timestamp, snsRecord.Message)
 		expense, err := createExpense(snsRecord.Message)
 		if err != nil {
 			panic(err)
 		}
-		toshlClient.CreateEntry(&expense)
+		err = toshlClient.CreateEntry(&expense)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -44,7 +45,7 @@ func main() {
 func categories() (map[string]string, error) {
 	rawData := os.Getenv("categoryData")
 	var categoryMap map[string]string
-	err := json.Unmarshal([]byte(rawData), categoryMap)
+	err := json.Unmarshal([]byte(rawData), &categoryMap)
 	if err != nil {
 		return map[string]string{}, err
 	}
@@ -54,6 +55,6 @@ func categories() (map[string]string, error) {
 
 func createExpense(message string) (client.Expense, error) {
 	var expense client.Expense
-	err := json.Unmarshal([]byte(message), expense)
+	err := json.Unmarshal([]byte(message), &expense)
 	return expense, err
 }

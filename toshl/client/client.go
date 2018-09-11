@@ -38,7 +38,10 @@ type toshlEntry struct {
 	Category string        `json:"category"`
 }
 
-type toshlCategories map[string]string
+type toshlCategory struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
 
 // CreateEntry entry will create a new entry in Toshl based on the Expense data
 func (c *Client) CreateEntry(expense *Expense) error {
@@ -53,7 +56,7 @@ func (c *Client) CreateEntry(expense *Expense) error {
 		return err
 	}
 
-	req, err := http.NewRequest("POST", "ttps://api.toshl.com/entries", bytes.NewBuffer(dataJSON))
+	req, err := http.NewRequest("POST", "https://api.toshl.com/entries", bytes.NewBuffer(dataJSON))
 	if err != nil {
 		return err
 	}
@@ -65,7 +68,7 @@ func (c *Client) CreateEntry(expense *Expense) error {
 	}
 	defer resp.Body.Close()
 	respCode := resp.StatusCode
-	if respCode != 200 {
+	if respCode != 201 {
 		return fmt.Errorf("Something went wrong, response code was %d", respCode)
 	}
 
@@ -83,7 +86,7 @@ func (c *Client) newToshlEntry(expense *Expense) (toshlEntry, error) {
 		Currency: toshlCurrency{
 			Code: expense.Currency,
 		},
-		Date:     expense.Created.Format("2000-12-31"),
+		Date:     expense.Created.Format("2006-01-02"),
 		Desc:     expense.Description,
 		Account:  c.AccountID,
 		Category: category,
@@ -109,12 +112,17 @@ func (c *Client) categoryID(categoryName string) (string, error) {
 		return "", err
 	}
 	defer resp.Body.Close()
-	var categories toshlCategories
-	err = json.NewDecoder(resp.Body).Decode(categories)
+	var categories []toshlCategory
+	err = json.NewDecoder(resp.Body).Decode(&categories)
 	if err != nil {
 		return "", err
 	}
-	category := categories[mappedCategoryName]
+	var category string
+	for _, v := range categories {
+		if v.Name == mappedCategoryName {
+			category = v.ID
+		}
+	}
 	if category == "" {
 		return "", fmt.Errorf("Category not found in Toshl for name %s", mappedCategoryName)
 	}
