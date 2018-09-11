@@ -63,7 +63,6 @@ type monzoEvent struct {
 		ID          string    `json:"id"`
 		Category    string    `json:"category"`
 		IsLoad      bool      `json:"is_load"`
-		Settled     bool      `json:"settled"`
 		Merchant    struct {
 			Address struct {
 				Address   string  `json:"address"`
@@ -93,10 +92,12 @@ type expenseEvent struct {
 	Category    string    `json:"category"`
 }
 
+// Handler is a type that will handle a Monzo request coming through an API Gateway Proxy Request
 type Handler struct {
 	SnsTopicArn string
 }
 
+// Handle handles a Monzo request coming through an API Gateway Proxy Request
 func (h *Handler) Handle(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	event := &monzoEvent{}
 
@@ -120,6 +121,7 @@ func (h *Handler) publishEvent(event monzoEvent) error {
 		Created:     event.Data.Created,
 		Description: event.Data.Description,
 		Category:    event.Data.Category,
+		Currency:    event.Data.Currency,
 	}
 	expenseBytes, err := json.Marshal(expense)
 	if err != nil {

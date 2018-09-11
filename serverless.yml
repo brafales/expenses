@@ -50,6 +50,10 @@ provider:
       Action:
         - SNS:Publish
       Resource: ${self:custom.snsTopicArn}
+    - Effect: Allow
+      Action:
+        - SQS:SendMessage
+      Resource: ${self:custom.sqsToshlDLQArn}
 # you can define service wide environment variables here
 #  environment:
 #    variable1: value1
@@ -70,6 +74,7 @@ custom:
   snsTopic: "${self:service}-${self:provider.stage}-expense-created"
   snsTopicArn: { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.snsTopic}" ] ]  }
   sqsToshlDLQ: "${self:custom.snsTopic}-toshl-dlq"
+  sqsToshlDLQArn: { "Fn::Join" : ["", ["arn:aws:sqs:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.sqsToshlDLQ}" ] ]  }
 
 package:
  exclude:
@@ -96,4 +101,3 @@ functions:
     environment:
       snsTopicArn: ${self:custom.snsTopicArn}
       token: ${ssm:/${self:service}/ToshlToken~true}
-
