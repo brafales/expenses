@@ -12,8 +12,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/sns"
 )
 
-var categories = [...]string{"eating_out", "transport"}
-
 // Response is of type APIGatewayProxyResponse since we're leveraging the
 // AWS Lambda Proxy Request functionality (default behavior)
 //
@@ -95,6 +93,7 @@ type expenseEvent struct {
 // Handler is a type that will handle a Monzo request coming through an API Gateway Proxy Request
 type Handler struct {
 	SnsTopicArn string
+	Categories  []string
 }
 
 // Handle handles a Monzo request coming through an API Gateway Proxy Request
@@ -143,7 +142,7 @@ func (h *Handler) publishEvent(event monzoEvent) error {
 }
 
 func (h *Handler) interested(event monzoEvent) bool {
-	for _, v := range categories {
+	for _, v := range h.Categories {
 		if v == event.Data.Category {
 			return true
 		}

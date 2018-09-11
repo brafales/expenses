@@ -91,6 +91,7 @@ functions:
           method: post
     environment:
       snsTopicArn: ${self:custom.snsTopicArn}
+      categoryData: ${ssm:/${self:service}/CategoryData}
 
   toshl:
     handler: bin/toshl
@@ -102,3 +103,4 @@ functions:
       snsTopicArn: ${self:custom.snsTopicArn}
       token: ${ssm:/${self:service}/ToshlToken~true}
       accountId: ${ssm:/${self:service}/ToshlAccountId}
+      categoryData: ${ssm:/${self:service}/CategoryData}
