@@ -7,6 +7,8 @@ jobs:
     docker:
       # specify the version
       - image: circleci/golang:1.11
+    environment:
+      - DEP_VERSION: 0.5.0
       
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -20,6 +22,22 @@ jobs:
     working_directory: /go/src/github.com/brafales/expenses
     steps:
       - checkout
+      - restore_cache:
+          key: gopkg-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+          paths:
+            - /go/src/github.com/brafales/expenses/vendor
+      - run:
+          name: download-libraries
+          command: |
+            if [ ! -d /go/src/github.com/brafales/expenses/vendor ]; then
+                curl -L -s https://github.com/golang/dep/releases/download/v${DEP_VERSION}/dep-linux-amd64 -o /go/bin/dep
+                chmod +x /go/bin/dep
+                /go/bin/dep ensure
+            fi
+      - save_cache:
+          key: gopkg-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+          paths:
+            - /go/src/github.com/your_company/your_app/vendor
 
       # specify any bash command here prefixed with `run: `
       - run: make test
