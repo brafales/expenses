@@ -58,3 +58,7 @@ jobs:
             sudo npm install serverless -g
             sudo npm install serverless-domain-manager
             sudo npm install serverless-plugin-lambda-dead-letter
+
+      - run:
+          name: deploy
+          command: make deploy
