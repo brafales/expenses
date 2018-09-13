@@ -11,20 +11,6 @@ import (
 	"github.com/brafales/expenses/monzo/handler"
 )
 
-var categories = []string{"transport"}
-
-type testSNSClient struct {
-	snsiface.SNSAPI
-}
-
-func (t testSNSClient) Publish(input *sns.PublishInput) (*sns.PublishOutput, error) {
-	id := "id"
-	output := sns.PublishOutput{
-		MessageId: &id,
-	}
-	return &output, nil
-}
-
 const monzoRequest = `{
 	"type": "transaction.created",
 	"data": {
@@ -92,13 +78,39 @@ const monzoRequest = `{
 	  "can_be_made_subscription": true,
 	  "can_split_the_bill": true
 	}
-  }`
+	}`
+
+const SNSMessage = `{"amount":-2000,"created":"2018-09-11T01:19:22.692Z","currency":"GBP","description":"OYSTER AUTO TOPUP      LONDON        GBR","category":"transport"}`
+
+var categories = []string{"transport"}
+
+type testSNSClient struct {
+	snsiface.SNSAPI
+	T      *testing.T
+	Called bool
+}
+
+func (t *testSNSClient) Publish(input *sns.PublishInput) (*sns.PublishOutput, error) {
+	if *input.Message != SNSMessage {
+		t.T.Errorf("Unexpected message published to SNS. Expected %s, got %s", SNSMessage, *input.Message)
+	}
+	id := "id"
+	output := sns.PublishOutput{
+		MessageId: &id,
+	}
+	t.Called = true
+	return &output, nil
+}
 
 func TestHappyPath(t *testing.T) {
+	client := testSNSClient{
+		T:      t,
+		Called: false,
+	}
 	handler := handler.Handler{
 		SnsTopicArn: "topic",
 		Categories:  categories,
-		SNSClient:   testSNSClient{},
+		SNSClient:   &client,
 	}
 
 	context := context.Background()
@@ -108,5 +120,8 @@ func TestHappyPath(t *testing.T) {
 	_, err := handler.Handle(context, proxyRequest)
 	if err != nil {
 		t.Error(err)
+	}
+	if !client.Called {
+		t.Error("Expected SNS Client to be called")
 	}
 }

@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -132,12 +131,11 @@ func (h *Handler) publishEvent(event monzoEvent) error {
 		Message:  aws.String(string(expenseBytes)),
 		TopicArn: aws.String(h.SnsTopicArn),
 	}
-	resp, err := h.SNSClient.Publish(params)
+	_, err = h.SNSClient.Publish(params)
 
 	if err != nil {
 		return err
 	}
-	fmt.Println(resp)
 	return nil
 }
 
