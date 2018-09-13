@@ -18,10 +18,11 @@ func Handler(ctx context.Context, snsEvent events.SNSEvent) {
 		panic(err)
 	}
 	toshlClient := client.Client{
-		AuthToken:   os.Getenv("token"),
-		AccountID:   os.Getenv("accountId"),
-		HTTPClient:  http.Client{},
-		CategoryMap: categories,
+		AuthToken:    os.Getenv("token"),
+		AccountID:    os.Getenv("accountId"),
+		HTTPClient:   http.Client{},
+		CategoryMap:  categories,
+		ToshlBaseURL: "https://api.toshl.com",
 	}
 
 	for _, record := range snsEvent.Records {

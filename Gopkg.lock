@@ -15,7 +15,7 @@
   version = "v1.6.0"
 
 [[projects]]
-  digest = "1:a9048af9a7fea86f7afcb0989bd9b4977266769b784e249203594ceef97df7f1"
+  digest = "1:5220d1370d167906ef310260d64331b646b542268c349196a2ff59786f8f78b6"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -48,8 +48,16 @@
     "service/sts",
   ]
   pruneopts = ""
-  revision = "1186f7e6f000ce13edff71ed5ecc8b0e27ba38d7"
-  version = "v1.15.33"
+  revision = "10d5f1478e28a17062fd79617a8022f5499462d5"
+  version = "v1.15.34"
+
+[[projects]]
+  digest = "1:512883404c2a99156e410e9880e3bb35ecccc0c07c1159eb204b5f3ef3c431b3"
+  name = "github.com/bitly/go-simplejson"
+  packages = ["."]
+  pruneopts = ""
+  revision = "aabad6e819789e569bd6aabf444c935aa9ba1e44"
+  version = "v0.5.0"
 
 [[projects]]
   digest = "1:cd5bab9c9e23ffa6858eaa79dc827fd84bc24bc00b0cfb0b14036e393da2b1fa"
@@ -75,6 +83,7 @@
     "github.com/aws/aws-sdk-go/aws",
     "github.com/aws/aws-sdk-go/aws/session",
     "github.com/aws/aws-sdk-go/service/sns",
+    "github.com/bitly/go-simplejson",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

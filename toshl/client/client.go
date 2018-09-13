@@ -10,10 +10,11 @@ import (
 
 // Client is a client to talk to Toshl's REST API
 type Client struct {
-	AuthToken   string
-	AccountID   string
-	HTTPClient  http.Client
-	CategoryMap map[string]string
+	AuthToken    string
+	AccountID    string
+	HTTPClient   http.Client
+	CategoryMap  map[string]string
+	ToshlBaseURL string
 }
 
 // Expense defines a Toshl Entry
@@ -45,7 +46,6 @@ type toshlCategory struct {
 
 // CreateEntry entry will create a new entry in Toshl based on the Expense data
 func (c *Client) CreateEntry(expense *Expense) error {
-	client := http.Client{}
 	data, err := c.newToshlEntry(expense)
 	if err != nil {
 		return err
@@ -56,13 +56,13 @@ func (c *Client) CreateEntry(expense *Expense) error {
 		return err
 	}
 
-	req, err := http.NewRequest("POST", "https://api.toshl.com/entries", bytes.NewBuffer(dataJSON))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/entries", c.ToshlBaseURL), bytes.NewBuffer(dataJSON))
 	if err != nil {
 		return err
 	}
 	req.SetBasicAuth(c.AuthToken, "")
 	req.Header.Set("Content-Type", "application/json")
-	resp, err := client.Do(req)
+	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return err
 	}
@@ -100,14 +100,13 @@ func (c *Client) categoryID(categoryName string) (string, error) {
 	if mappedCategoryName == "" {
 		return "", fmt.Errorf("Category %s not in the mapping", categoryName)
 	}
-	client := http.Client{}
-	req, err := http.NewRequest("GET", "https://api.toshl.com/categories", nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/categories", c.ToshlBaseURL), nil)
 	if err != nil {
 		return "", err
 	}
 	req.SetBasicAuth(c.AuthToken, "")
 	req.Header.Set("Content-Type", "application/json")
-	resp, err := client.Do(req)
+	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return "", err
 	}
