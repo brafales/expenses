@@ -41,3 +41,12 @@ jobs:
 
       # specify any bash command here prefixed with `run: `
       - run: make test
+
+      - run:
+          name: prepare deploy
+          command: |
+            echo "service: $SERVICE" >> env.yml
+            echo "app: $APP" >> env.yml
+            echo "tenant: $TENANT" >> env.yml
+            echo "domainName: $DOMAIN_NAME" >> env.yml
+            cat env.yml
