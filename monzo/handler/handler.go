@@ -8,8 +8,8 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sns"
+	"github.com/aws/aws-sdk-go/service/sns/snsiface"
 )
 
 // Response is of type APIGatewayProxyResponse since we're leveraging the
@@ -94,6 +94,7 @@ type expenseEvent struct {
 type Handler struct {
 	SnsTopicArn string
 	Categories  []string
+	SNSClient   snsiface.SNSAPI
 }
 
 // Handle handles a Monzo request coming through an API Gateway Proxy Request
@@ -127,12 +128,11 @@ func (h *Handler) publishEvent(event monzoEvent) error {
 		return err
 	}
 
-	svc := sns.New(session.New())
 	params := &sns.PublishInput{
 		Message:  aws.String(string(expenseBytes)),
 		TopicArn: aws.String(h.SnsTopicArn),
 	}
-	resp, err := svc.Publish(params)
+	resp, err := h.SNSClient.Publish(params)
 
 	if err != nil {
 		return err

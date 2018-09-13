@@ -45,6 +45,7 @@
     "private/protocol/rest",
     "private/protocol/xml/xmlutil",
     "service/sns",
+    "service/sns/snsiface",
     "service/sts",
   ]
   pruneopts = ""
@@ -83,6 +84,7 @@
     "github.com/aws/aws-sdk-go/aws",
     "github.com/aws/aws-sdk-go/aws/session",
     "github.com/aws/aws-sdk-go/service/sns",
+    "github.com/aws/aws-sdk-go/service/sns/snsiface",
     "github.com/bitly/go-simplejson",
   ]
   solver-name = "gps-cdcl"
