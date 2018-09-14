@@ -13,5 +13,8 @@ clean:
 deploy: clean build
 	sls deploy --verbose
 
+silent_deploy: clean build
+	sls deploy > /dev/null 2>&1
+
 test:
 	@go test -v $(GOPACKAGES)

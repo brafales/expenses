@@ -9,7 +9,7 @@ jobs:
       - image: circleci/golang:1.11
     environment:
       - DEP_VERSION: 0.5.0
-      
+
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -61,4 +61,4 @@ jobs:
 
       - run:
           name: deploy
-          command: make deploy
+          command: make silent_deploy
