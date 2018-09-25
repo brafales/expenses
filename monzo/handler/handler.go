@@ -101,13 +101,13 @@ func (h *Handler) Handle(ctx context.Context, request events.APIGatewayProxyRequ
 	event := &monzoEvent{}
 
 	if err := json.Unmarshal([]byte(request.Body), event); err != nil {
-		return events.APIGatewayProxyResponse{}, err
+		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: 500}, err
 	}
 
 	if h.interested(*event) {
 		err := h.publishEvent(*event)
 		if err != nil {
-			return events.APIGatewayProxyResponse{}, err
+			return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: 500}, err
 		}
 	}
 
