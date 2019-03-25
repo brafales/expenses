@@ -28,7 +28,7 @@ type Response events.APIGatewayProxyResponse
 //         "id": "tx_00008zjky19HyFLAzlUk7t",
 //         "category": "eating_out",
 //         "is_load": false,
-//         "settled": true,
+//         "settled": "2015-08-23T12:20:18Z",
 //         "merchant": {
 //             "address": {
 //                 "address": "98 Southgate Road",
@@ -78,6 +78,7 @@ type monzoEvent struct {
 			Name     string    `json:"name"`
 			Category string    `json:"category"`
 		} `json:"merchant"`
+		Settled  string `json:"settled"`
 	} `json:"data"`
 }
 
@@ -140,6 +141,9 @@ func (h *Handler) publishEvent(event monzoEvent) error {
 }
 
 func (h *Handler) interested(event monzoEvent) bool {
+	if len(event.Data.Settled) == 0 {
+	  return false
+	}
 	for _, v := range h.Categories {
 		if v == event.Data.Category {
 			return true

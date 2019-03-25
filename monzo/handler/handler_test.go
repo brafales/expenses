@@ -63,7 +63,7 @@ const monzoRequest = `{
 	  "international": null,
 	  "category": "transport",
 	  "is_load": false,
-	  "settled": "",
+	  "settled": "2018-07-04T01:03:28.487Z",
 	  "local_amount": -2000,
 	  "local_currency": "GBP",
 	  "updated": "2018-09-11T01:19:22.853Z",

@@ -2,7 +2,7 @@
 
 
 [[projects]]
-  digest = "1:8b55da6790eeade578c1fd4ebaa5b0e641072172e1d743f3cb945ae73af463f9"
+  digest = "1:75b6e611eafd029c4a94ec38c9fb44b93fecae2d6c9d7a3db9826333f630cb22"
   name = "github.com/aws/aws-lambda-go"
   packages = [
     "events",
@@ -11,11 +11,11 @@
     "lambdacontext",
   ]
   pruneopts = ""
-  revision = "2d482ef09017ae953b1e8d5a6ddac5b696663a3c"
-  version = "v1.6.0"
+  revision = "9e3676ee8ca83aee500682f382e10b9d03660093"
+  version = "v1.8.0"
 
 [[projects]]
-  digest = "1:3d471b504d08f50b18ca888a69b0df39ba01c3b83cc137981941967f1c45c585"
+  digest = "1:e6c1782b517893a23f3e1a198ecbd66fef742f1949cb0a9028fec7a650226c57"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -27,6 +27,7 @@
     "aws/credentials",
     "aws/credentials/ec2rolecreds",
     "aws/credentials/endpointcreds",
+    "aws/credentials/processcreds",
     "aws/credentials/stscreds",
     "aws/csm",
     "aws/defaults",
@@ -35,6 +36,7 @@
     "aws/request",
     "aws/session",
     "aws/signer/v4",
+    "internal/ini",
     "internal/sdkio",
     "internal/sdkrand",
     "internal/sdkuri",
@@ -49,8 +51,8 @@
     "service/sts",
   ]
   pruneopts = ""
-  revision = "87474c2d2bbdf6bd31275e435648aeb6c3d6815d"
-  version = "v1.15.35"
+  revision = "056aa960bc0fb3918d8b2101e2a9c92675327ea3"
+  version = "v1.16.5"
 
 [[projects]]
   digest = "1:512883404c2a99156e410e9880e3bb35ecccc0c07c1159eb204b5f3ef3c431b3"
@@ -61,19 +63,19 @@
   version = "v0.5.0"
 
 [[projects]]
-  digest = "1:cd5bab9c9e23ffa6858eaa79dc827fd84bc24bc00b0cfb0b14036e393da2b1fa"
-  name = "github.com/go-ini/ini"
+  branch = "master"
+  digest = "1:007893a0efc9824bf87c88a2839917ad1e1ca51aeed6f8f3ae07a59defa9e141"
+  name = "github.com/fnproject/fdk-go"
   packages = ["."]
   pruneopts = ""
-  revision = "5cf292cae48347c2490ac1a58fe36735fb78df7e"
-  version = "v1.38.2"
+  revision = "225736950b1c233d370a4c97cd4633f2198deec9"
 
 [[projects]]
-  digest = "1:6f49eae0c1e5dab1dafafee34b207aeb7a42303105960944828c2079b92fc88e"
+  digest = "1:13fe471d0ed891e8544eddfeeb0471fd3c9f2015609a1c000aefdedf52a19d40"
   name = "github.com/jmespath/go-jmespath"
   packages = ["."]
   pruneopts = ""
-  revision = "0b12d6b5"
+  revision = "c2b33e84"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -86,6 +88,7 @@
     "github.com/aws/aws-sdk-go/service/sns",
     "github.com/aws/aws-sdk-go/service/sns/snsiface",
     "github.com/bitly/go-simplejson",
+    "github.com/fnproject/fdk-go",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
